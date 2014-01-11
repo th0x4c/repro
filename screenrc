@@ -1,0 +1,25 @@
+startup_message off
+
+escape z
+defhstatus "n:t"
+markkeys h=:l=:$=
+caption always "%{= wg} %-w%{=bu dr}%n %t%{-}%+w %= %{=b wb}%m/%d/%Y %{=b wm}%c"
+
+defscrollback 10000
+
+bind  paste .
+bind o focus
+
+bind -c REGION 2 split
+# bind -c REGION 3 split -v
+bind -c REGION 1 only
+bind -c REGION 0 remove
+bind -c REGION o focus
+bind -c REGION \^ resize
+bind  command -c REGION
+
+defbce on
+# term xterm-color
+term xterm-256color
+
+# rendition so "+rb .W"
