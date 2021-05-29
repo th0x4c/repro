@@ -24,6 +24,30 @@ module Repro
   HOME = File.dirname(__FILE__)
   DEFAULT_SCREENRC = HOME + '/screenrc'
 
+  module Login
+    def ssh(hostname, password, user = nil, port = nil)
+      command = "ssh -o StrictHostKeyChecking=no #{"-p " + port.to_s if port} #{user + '@' if user}#{hostname}"
+      login_prompt = /password: /
+      return login(command, login_prompt, password)
+    end
+
+    def su(user, password)
+      command = "LANG=C su - #{user}"
+      login_prompt = /Password: /
+      return login(command, login_prompt, password)
+    end
+
+    private
+    def login(command, login_prompt, password)
+      current_prompt = self.prompt
+      self.prompt = login_prompt
+      cmd(command)
+      self.prompt = current_prompt
+      cmd(password)
+      return self
+    end
+  end
+
   class ScreenSession
     def initialize
       @name = "repro#{Time.now.strftime("%Y%m%d%H%M%S")}"
@@ -147,6 +171,8 @@ module Repro
   end
 
   class ScreenWindow
+    include Login
+
     DEFAULT_PROMPT = /[$%#>:] \z/n
 
     attr_reader :number
