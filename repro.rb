@@ -231,7 +231,7 @@ module Repro
 
   class Shell < InteractiveProgram
     PROGRAM = '/bin/sh'
-    PROMPT  = /\$ \z/
+    PROMPT  = /[$#] \z/
 
     def initialize(screen_window)
       super(screen_window, PROGRAM, PROMPT)
