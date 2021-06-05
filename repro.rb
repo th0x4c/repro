@@ -25,13 +25,13 @@ module Repro
   DEFAULT_SCREENRC = HOME + '/screenrc'
 
   module Login
-    def ssh(hostname, password, user = nil, port = nil)
+    def ssh(hostname, password = nil, user = nil, port = nil)
       command = "ssh -o StrictHostKeyChecking=no #{"-p " + port.to_s if port} #{user + '@' if user}#{hostname}"
       login_prompt = /password: /
       return login(command, login_prompt, password)
     end
 
-    def su(user, password)
+    def su(user, password = nil)
       command = "LANG=C su - #{user}"
       login_prompt = /Password: /
       return login(command, login_prompt, password)
@@ -39,11 +39,15 @@ module Repro
 
     private
     def login(command, login_prompt, password)
-      current_prompt = self.prompt
-      self.prompt = login_prompt
-      cmd(command)
-      self.prompt = current_prompt
-      cmd(password)
+      if password.nil?
+        cmd(command)
+      else
+        current_prompt = self.prompt
+        self.prompt = login_prompt
+        cmd(command)
+        self.prompt = current_prompt
+        cmd(password)
+      end
       return self
     end
   end
