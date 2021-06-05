@@ -177,7 +177,7 @@ module Repro
   class ScreenWindow
     include Login
 
-    DEFAULT_PROMPT = /[$%#>:] \z/n
+    DEFAULT_PROMPT = /[$%#>] \z/n
 
     attr_reader :number
     attr_accessor :prompt
